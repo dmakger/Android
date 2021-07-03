@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/bgc"
+    android:statusBarColor="@color/bgc">
+
+    <RelativeLayout
+        android:id="@+id/buttonPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="30dp">
+
+        <Button
+            android:id="@+id/add_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingHorizontal="100dp"
+            android:paddingVertical="5dp"
+            android:text="@string/add_alarm"
+            android:background="@color/purple_500"
+            android:textColor="@color/white"
+            android:onClick="onClickAdd"
+            android:textSize="36sp" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_alarm"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/buttonPanel"
+        tools:listitem="@layout/list_item"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <RelativeLayout
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@color/shadow_bgc"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/alarm_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="135dp"
+            android:paddingHorizontal="50dp"
+            android:visibility="gone"
+            android:background="@color/bgc">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/hours"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="50sp"
+                    android:hint="@string/zero"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/gray"
+                    android:textColor="@color/white"
+                    />
+
+                <TextView
+                    android:id="@+id/hours_sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:textSize="50sp"
+                    android:text="@string/hours_sign"
+                    android:textColor="@color/gray"
+                    />
+
+                <EditText
+                    android:id="@+id/minutes"
+                    android:layout_width="62dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="50sp"
+                    android:hint="@string/zero"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textColorHint="@color/gray"
+                    android:textColor="@color/white"
+                    />
+
+                <TextView
+                    android:id="@+id/minutes_sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:textSize="50sp"
+                    android:text="@string/minutes_sign"
+                    android:textColor="@color/gray"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal">
+
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="20dp"
+
+                    android:onClick="onClickCancel"
+                    android:text="@string/cancel"
+                    android:background="@color/purple_500"
+                    android:textColor="@color/white"
+                    tools:ignore="UsingOnClickInXml" />
+
+                <Button
+                    android:id="@+id/save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginLeft="20dp"
+
+                    android:onClick="onClickSave"
+                    android:text="@string/save"
+                    android:background="@color/purple_500"
+                    android:textColor="@color/white"
+                    tools:ignore="UsingOnClickInXml" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wrap_stop_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="135dp"
+            android:paddingHorizontal="50dp"
+            android:background="@color/bgc2"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/text_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:text="@string/text_alarm"
+                android:textColor="@color/white"
+                android:textSize="27sp" />
+
+            <Button
+                android:id="@+id/stop_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/yes"
+                android:onClick="onClickStopAlarm"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

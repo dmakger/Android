@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Timer</string>
+
+    <string name="hours">00</string>
+    <string name="hours_sign">h</string>
+    <string name="minutes">00</string>
+    <string name="minutes_sign">m</string>
+    <string name="seconds">00</string>
+    <string name="seconds_sign">s</string>
+
+    <string name="start">Start</string>
+    <string name="cancel">Cancel</string>
+    <string name="mode">Pause</string>
+</resources>
