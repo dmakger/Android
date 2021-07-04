@@ -4,15 +4,177 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bgc3"
     tools:context=".Timer">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Timer"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true" />
+        android:paddingBottom="100dp"
+        android:orientation="vertical"
+        android:layout_centerVertical="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            >
+
+            <EditText
+                android:id="@+id/hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="50sp"
+                android:hint="@string/zero"
+                android:textColorHint="@color/gray"
+                android:textColor="@color/white"
+                android:inputType="number"
+                android:maxLength="2"
+                />
+
+            <TextView
+                android:id="@+id/hours_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="4dp"
+                android:textSize="50sp"
+                android:visibility="gone"
+                android:text=""
+                android:textColor="@color/white"
+                />
+
+            <TextView
+                android:id="@+id/hours_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:textSize="50sp"
+                android:text="@string/hours_sign"
+                android:textColor="@color/gray"
+                />
+
+            <EditText
+                android:id="@+id/minutes"
+                android:layout_width="62dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="50sp"
+                android:hint="@string/zero"
+                android:textColorHint="@color/gray"
+                android:textColor="@color/white"
+                android:inputType="number"
+                android:maxLength="2"
+                />
+
+            <TextView
+                android:id="@+id/minutes_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="4dp"
+                android:textSize="50sp"
+                android:visibility="gone"
+                android:text=""
+                android:textColor="@color/white"
+                />
+
+            <TextView
+                android:id="@+id/minutes_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:textSize="50sp"
+                android:text="@string/minutes_sign"
+                android:textColor="@color/gray"
+                />
+
+            <EditText
+                android:id="@+id/seconds"
+                android:layout_width="62dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="50sp"
+                android:hint="@string/zero"
+                android:textColorHint="@color/gray"
+                android:textColor="@color/white"
+                android:inputType="number"
+                android:maxLength="2"
+                />
+
+            <TextView
+                android:id="@+id/seconds_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="4dp"
+                android:textSize="50sp"
+                android:visibility="gone"
+                android:text=""
+                android:textColor="@color/white"
+                />
+
+            <TextView
+                android:id="@+id/seconds_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:textSize="50sp"
+                android:text="@string/seconds_sign"
+                android:textColor="@color/gray"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            >
+
+            <Button
+                android:id="@+id/start"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="50dp"
+                android:onClick="onClickStart"
+                android:text="@string/start"
+                android:background="@color/purple_500"
+                android:textColor="@color/white"
+                tools:ignore="UsingOnClickInXml" />
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="50dp"
+                android:onClick="onClickCancel"
+                android:text="@string/cancel"
+                android:visibility="gone"
+                android:background="@color/purple_500"
+                android:textColor="@color/white"
+                tools:ignore="UsingOnClickInXml" />
+
+            <Button
+                android:id="@+id/mode"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="50dp"
+                android:onClick="onClickMode"
+                android:text="@string/mode"
+                android:visibility="gone"
+                android:background="@color/purple_500"
+                android:textColor="@color/white"
+                tools:ignore="UsingOnClickInXml" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"

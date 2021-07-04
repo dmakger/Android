@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MacClock">
-        <activity android:name=".Stopwatch"></activity>
+        <activity android:name=".Stopwatch" />
         <activity android:name=".Timer" />
         <activity android:name=".MainActivity">
             <intent-filter>
