@@ -2,40 +2,20 @@ package com.example.alarmclock;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends Activity {
 
@@ -49,9 +29,9 @@ public class MainActivity extends Activity {
     private RecyclerView recycler;
     private LinearLayout wrapStopAlarm;
 
-    private AlarmAdapter adapter;
+    private int posSound;
     private List<Alarm> alarmList;
-    private MediaPlayer sound;
+    private AlarmAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,23 +48,66 @@ public class MainActivity extends Activity {
         recycler = findViewById(R.id.list_alarm);
         wrapStopAlarm = findViewById(R.id.wrap_stop_alarm);
 
-        // Если нажали на пустое пространство, закрываем окно
-        shadow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancelDetailAlarm();
-                cancelWrapStopAlarm();
-            }
-        });
-
+        posSound = -1;
         alarmList = new ArrayList<Alarm>();
+
+        if (savedInstanceState != null) {
+            alarmList = getAlarmArrayList(savedInstanceState, "alarmList");
+            posSound = savedInstanceState.getInt("posSound");
+        }
+
         adapter = new AlarmAdapter(this, R.layout.list_item, alarmList);
 
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
-        sound = MediaPlayer.create(this, R.raw.never_gonna_give_you_up_full);
-        runTimer();
+        if (savedInstanceState == null) {
+            runTimer();
+        }
+    }
+
+    public ArrayList<Alarm> getAlarmArrayList(Bundle savedInstanceState, String key) {
+        String[] timeArray = savedInstanceState.getStringArray(key + "Times");
+        boolean[] stateAlarmArray = savedInstanceState.getBooleanArray(key + "StateAlarms");
+        int[] secondsArray = savedInstanceState.getIntArray(key + "Seconds");
+        int[] idSoundArray = savedInstanceState.getIntArray(key + "idSounds");
+
+        ArrayList<Alarm> alarmArrayList = new ArrayList<>(timeArray.length);
+        for (int i = 0; i != timeArray.length; ++i) {
+            Alarm newAlarm = new Alarm(timeArray[i], stateAlarmArray[i]);
+            newAlarm.seconds = secondsArray[i];
+            newAlarm.setSound(this, idSoundArray[i]);
+            alarmArrayList.add(newAlarm);
+        }
+
+        return alarmArrayList;
+    }
+
+    public void putAlarmArrayList(@NonNull Bundle outState, String key, List<Alarm> alarmArray) {
+        String[] timeArray = new String[alarmArray.size()];
+        boolean[] stateAlarmArray = new boolean[alarmArray.size()];
+        int[] secondsArray = new int[alarmArray.size()];
+        int[] idSoundArray = new int[alarmArray.size()];
+        for (int i = 0; i != alarmArray.size(); ++i) {
+            Alarm alarm = alarmArray.get(i);
+            timeArray[i] = alarm.time;
+            stateAlarmArray[i] = alarm.stateAlarm;
+            secondsArray[i] = alarm.seconds;
+            idSoundArray[i] = alarm.getIdSound();
+        }
+
+        outState.putStringArray(key + "Times", timeArray);
+        outState.putBooleanArray(key + "StateAlarms", stateAlarmArray);
+        outState.putIntArray(key + "Seconds", secondsArray);
+        outState.putIntArray(key + "idSounds", idSoundArray);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        putAlarmArrayList(outState, "alarmList", alarmList);
+        outState.putInt("posSound", posSound);
     }
 
     private void runTimer() {
@@ -95,16 +118,23 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 handler.postDelayed(this, 1000);
-                int count = 0;
                 Alarm alarm;
+                int count = 0;
                 // Проверяем все будильники
                 for (int i = 0; i != alarmList.size(); ++i) {
+                    count += 1;
                     alarm = alarmList.get(i);
                     // Если будильник включен, то
                     if (alarm.stateAlarm) {
-                        ++count;
+                        System.out.println(alarm.seconds);
                         // Если время прошло, обновляем будильник и проигрываем песню
-                        if (alarm.seconds < 0) {
+                        if (alarm.seconds == 0) {
+                            // Если будильник уже играет, то выключаем прошлый и включаем новый
+                            if (posSound != -1){
+                                soundStop();
+                            }
+                            System.out.println("I am PLAYING");
+                            posSound = i;
                             updateAlarm(i);
                             soundPlay();
                         }
@@ -124,14 +154,14 @@ public class MainActivity extends Activity {
     }
 
     private void soundPlay() {
-        sound.start();
-        sound.setLooping(true);
+        alarmList.get(posSound).soundPlay();
         shadow.setVisibility(View.VISIBLE);
         wrapStopAlarm.setVisibility(View.VISIBLE);
     }
 
     private void soundStop() {
-        sound.stop();
+        alarmList.get(posSound).soundStop();
+        posSound = -1;
     }
 
     public void onClickAdd(View view) {
@@ -150,6 +180,8 @@ public class MainActivity extends Activity {
             String time = hour + ":" + minute;
             Alarm newAlarm = new Alarm(time, true);
             newAlarm.seconds = newAlarm.getNeedSeconds(hour, minute);
+//            newAlarm.seconds = 3;
+            newAlarm.setSound(this, R.raw.never_gonna_give_you_up_full);
             adapter.add(newAlarm);
             System.out.println(alarmList);
             cancelDetailAlarm();
@@ -157,7 +189,6 @@ public class MainActivity extends Activity {
     }
 
     public void onClickStopAlarm(View view) {
-        soundStop();
         cancelWrapStopAlarm();
     }
 
@@ -180,10 +211,7 @@ public class MainActivity extends Activity {
     }
 
     public static boolean isSuits(String hour, String minute) {
-        if (Integer.parseInt(hour) > 23 || Integer.parseInt(minute) > 59) {
-            return false;
-        }
-        return true;
+        return !(Integer.parseInt(hour) > 23 || Integer.parseInt(minute) > 59);
     }
 
     private void cancelDetailAlarm() {

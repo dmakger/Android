@@ -1,5 +1,9 @@
 package com.example.alarmclock;
 
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.view.View;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +14,8 @@ public class Alarm {
     public String time;
     public boolean stateAlarm;
     public int seconds;
+    private MediaPlayer sound;
+    private int idSound;
 
     public Alarm(String time, boolean stateAlarm) {
         this(time, stateAlarm, 0);
@@ -19,6 +25,29 @@ public class Alarm {
         this.time = time;
         this.stateAlarm = stateAlarm;
         this.seconds = seconds;
+    }
+
+    public int getIdSound() {
+        return idSound;
+    }
+
+    public void setSound(Context context, int sound) {
+        idSound = sound;
+        this.sound = MediaPlayer.create(context, idSound);
+    }
+
+    public void soundPlay() {
+        sound.start();
+        sound.setLooping(true);
+    }
+
+    public boolean soundIsPlaying() {
+        return sound.isPlaying();
+    }
+
+    public void soundStop() {
+        sound.setLooping(false);
+        sound.stop();
     }
 
     private int getPartTimeInteger(String pattern, Date currentDate) {
